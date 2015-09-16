@@ -148,7 +148,7 @@ public final class CommonObject implements CommonData, Serializable, Iterable<En
 		return false;
 	}
 	
-	Object put(String key, Object value) {
+	public Object put(String key, Object value) {
 		if (typeAccepted(value)) {
 			return datas.put(key, value);
 		} else {
@@ -185,5 +185,9 @@ public final class CommonObject implements CommonData, Serializable, Iterable<En
 	
 	public Collection<Object> values() {
 		return datas.values();
+	}
+	
+	public int size() {
+		return datas.size();
 	}
 }

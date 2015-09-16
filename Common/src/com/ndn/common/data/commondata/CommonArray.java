@@ -71,4 +71,8 @@ public class CommonArray implements CommonData, Iterable<Object> {
 	public Object get(int index) {
 		return datas.get(index);
 	}
+	
+	public int size() {
+		return datas.size();
+	}
 }
