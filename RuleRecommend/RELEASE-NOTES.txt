@@ -1,0 +1,4 @@
+# Feature
+  - Version 1.1.0
+    - Thêm sử dụng các giá trị động từ các sản phẩm thỏa mãn điều kiện vào trong kết quả gợi ý
+# Bug fix

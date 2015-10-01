@@ -1,0 +1,60 @@
+<project name="rule-recommend" default="deploy" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<property file="build.properties" />
+	<property name="version">1.1.0</property>
+	<property name="jar.name">${ant.project.name}-${version}</property>
+	<property name="lib" value="lib" />
+	<property name="classes" value="bin" />
+	<property name="conf" value="conf" />
+	<property name="dist" value="dist" />
+	<property name="dist.jar" value="${dist}/jar" />
+
+	<!-- clean cache for ivy -->
+	<target name="clean-cache" description="--> clean the ivy cache">
+		<ivy:cleancache />
+	</target>
+
+	<!-- User when ivy.xml changed -->
+	<target name="resolve" description="retreive dependencies with ivy">
+		<delete dir="${lib}">
+			<include name="*.jar" />
+			<exclude name="sqljdbc*.jar" />
+		</delete>
+		<ivy:retrieve />
+	</target>
+
+	<target name="clear" description="delete dist folder">
+		<delete dir="${dist}" />
+	</target>
+
+	<target name="prep" depends="clear" description="make dirs">
+		<delete>
+			<fileset dir="${dist}" erroronmissingdir="false">
+			</fileset>
+		</delete>
+		<mkdir dir="${dist}" />
+		<mkdir dir="${dist.jar}" />
+	</target>
+
+	<target name="build" depends="prep" description="build jar file">
+		<jar jarfile="${dist.jar}/${jar.name}.jar">
+			<fileset dir="${classes}" />
+		</jar>
+	</target>
+
+	<target name="deploy" depends="build">
+		<mkdir dir="${dist}/${jar.name}" />
+		<mkdir dir="${dist}/${jar.name}/lib" />
+		<copydir src="${lib}" dest="${dist}/${jar.name}/lib">
+		</copydir>
+		<copyfile src="${dist.jar}/${jar.name}.jar" dest="${dist}/${jar.name}/${jar.name}.jar" />
+	</target>
+
+	<target name="update-ivy" depends="deploy">
+		<sshexec command="mkdir -p /opt/nginx/lib/${ant.project.name}/${ant.project.name}/${version}" host="10.220.75.133" username="root" password="rootroot" trust="true" failonerror="false" />
+		<scp todir="root@10.220.75.133:/opt/nginx/lib/${ant.project.name}/${ant.project.name}/${version}" password="rootroot" trust="yes">
+			<fileset dir="${dist}/${jar.name}" />
+		</scp>
+	</target>
+
+</project>
