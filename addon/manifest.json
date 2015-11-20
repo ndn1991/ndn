@@ -1,0 +1,20 @@
+{
+   "browser_action": {
+      "default_icon": "icons/icon16.png",
+      "default_popup": "popup.html"
+   },
+	"icons": {
+      "128": "icons/icon16.png",
+      "16": "icons/icon16.png",
+      "32": "icons/icon16.png",
+      "48": "icons/icon16.png"
+   },
+   "author":"Noidung",
+   "description": "Get Infomation Products ADR",
+   "manifest_version": 2,
+   "name": "Get Infomation Products ADR",
+   "optional_permissions": [ "clipboardWrite" ],
+   "permissions": [ "*://adayroi.dev/*", "*://8mall.vn/*", "*://www.adayroi.com/*", "*://www.adayroi.vn/*" ],
+   "version": "1511.17"
+   
+}
