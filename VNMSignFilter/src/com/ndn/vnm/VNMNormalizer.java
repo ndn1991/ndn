@@ -1,6 +1,9 @@
 package com.ndn.vnm;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -133,8 +136,74 @@ public class VNMNormalizer {
     	return tmp;
     }
     
-    public static void main(String[] args) {
-        System.out.println("tưới cây");
-        System.out.println(toBuiltinUnicode("tưới cây".toCharArray()));
+    private static Map<Character, String> char2String = char2String();
+    
+    private static char[] baseChars(char c) {
+    	if (char2String.containsKey(c)) {
+    		String s = char2String.get(c);
+    		return s.toCharArray();
+    	} else {
+    		return new char[]{c};
+    	}
+    }
+    
+    private static int charOrder(char c) {
+    	switch (c) {
+	        case '`': return 1;
+	    	case '\'': return 2;
+	        case '?': return 3;
+	        case '~': return 4;
+	        case '.': return 5;
+	        
+	        case '(': return 100;
+	        case '^': return 101;
+	        case '+': return 102;
+    	}
+		return 0;
+    }
+    
+    public static int compare(char c1, char c2) {
+    	char[] cs1 = baseChars(c1);
+    	char[] cs2 = baseChars(c2);
+    	
+    	if (cs1.length == 1 && cs2.length == 1) {
+    		return Character.compare(c1, c2);
+    	}
+    	
+    	int comp = compare(cs1[0], cs2[0]);
+    	if (comp != 0) {
+    		return comp;
+    	}
+    	
+    	if (cs1.length == 1) {
+    		return -1;
+    	}
+    	
+    	if (cs2.length == 1) {
+    		return 1;
+    	}
+    	
+    	return Integer.compare(charOrder(cs1[1]), charOrder(cs2[1]));
+    }
+    
+    private static Map<Character, String> char2String() {
+    	Map<Character, String> rs = new HashMap<>();
+        for (String row : material) {
+            String[] es = row.split(" ");
+            char target = es[0].charAt(0);
+            if (es.length == 2) {
+            	rs.put(target, es[1]);
+            } else {
+            	rs.put(target, es[2]);	
+            }
+        }
+        
+        return rs;
+	}
+
+	public static void main(String[] args) {
+        List<String> ss = new ArrayList<>(Arrays.asList("an giang", "phú thọ", "Hà giang", "bình định", "ắn độ", "ăn", "ông trời", "ông troi", "ong chúa"));
+        ss.sort(new VNMComparator());
+        System.out.println(ss);
     }
 }
